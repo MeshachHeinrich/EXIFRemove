@@ -1,5 +1,6 @@
 import sys
 import os
+import imghdr
 import PIL.Image
 from PIL.ExifTags import TAGS
 
@@ -18,6 +19,11 @@ if (len(sys.argv) == 1):
 # Ensure provided file actually exists
 if not (os.path.exists(sys.argv[1])):
     print("File does not exist")
+    exit()
+
+# Finally, check file is a valid image format
+if not (imghdr.what(sys.argv[1])):
+    print("File is not an image format")
     exit()
 
 # Run the program
