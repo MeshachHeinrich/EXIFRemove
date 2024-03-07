@@ -8,6 +8,18 @@ def printGreen(text): print("\033[92m{}\033[00m".format(text), end='')
 def printYellow(text): print("\033[93m{}\033[00m".format(text), end='')
 def printBlue(text): print("\033[96m{}\033[00m".format(text), end='')
 
+# -------------------------------------------------------------------
+
+# Ensure all arguments were provided
+if (len(sys.argv) == 1):
+     print("Usage: python3 main.py PATH_TO_IMAGE")
+     exit()
+
+# Ensure provided file actually exists
+if not (os.path.exists(sys.argv[1])):
+    print("File does not exist")
+    exit()
+
 # Run the program
 printYellow("""\
     
@@ -19,11 +31,6 @@ printYellow("""\
 \n""")
 
 printBlue("By Meshach Heinrich\n\n")
-
-# Read input arguments
-if (len(sys.argv) == 1):
-     print("No file inputs provided")
-     exit()
      
 # Retrieve EXIF data from image
 image = PIL.Image.open(sys.argv[1])
