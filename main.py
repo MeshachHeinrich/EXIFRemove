@@ -42,6 +42,8 @@ printBlue("By Meshach Heinrich\n\n")
 image = PIL.Image.open(sys.argv[1])
 exif = image._getexif()
 
+gpsCoords = [0,0]
+
 # Display EXIF data
 if exif is None:
     print("File has no EXIF data")
@@ -55,8 +57,25 @@ else:
             print(f': {val}')
         else:
             printYellow(f'{key} : {val}') 
+            
+        # Store GPS coordinates
+        if f'{TAGS[key]}' == 'GPSInfo':
+                  
+            # Convert to decimal from its original degrees/minutes/seconds format via division by 60
+            gpsCoords = [f'{int(val[2][0]) + int(val[2][1])/60 + int(val[2][2])/3600},', f'{int(val[4][0]) + int(val[4][1])/60 + int(val[4][2])/3600}']
+            
+            # Flip latitude if it's oriented South
+            if f'{val[1][0]}' == 'S':
+                gpsCoords[0] = '-' + gpsCoords[0]
+            # Flip longitude if it's oriented West
+            if f'{val[3][0]}' == 'W':
+                gpsCoords[1] = '-' + gpsCoords[1]
+            
     
-    print("\n---------------------------------------\n")
+    
+# Display Google Maps link to the photo's origin location
+printYellow("\nLocation of origin: https://www.google.com/maps/search/" + gpsCoords[0] + gpsCoords[1] + "\n")
+print("\n---------------------------------------\n")
 
 # Remove EXIF data and output as file
 output = PIL.Image.new(image.mode, image.size)
